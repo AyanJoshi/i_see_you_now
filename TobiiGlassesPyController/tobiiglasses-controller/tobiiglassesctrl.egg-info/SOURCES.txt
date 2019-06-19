@@ -1,0 +1,12 @@
+LICENSE
+MANIFEST.in
+README.md
+setup.cfg
+setup.py
+tobiiglassesctrl/__init__.py
+tobiiglassesctrl/controller.py
+tobiiglassesctrl.egg-info/PKG-INFO
+tobiiglassesctrl.egg-info/SOURCES.txt
+tobiiglassesctrl.egg-info/dependency_links.txt
+tobiiglassesctrl.egg-info/requires.txt
+tobiiglassesctrl.egg-info/top_level.txt
