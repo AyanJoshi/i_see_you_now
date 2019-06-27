@@ -14,7 +14,7 @@
 #
 #   You should have received a copy of the GNU General Public License
 #   along with this program.  If not, see <https://www.gnu.org/licenses/>
-
+import keyboard
 import time
 import json
 from tobiiglassesctrl.controller import TobiiGlassesController
@@ -28,14 +28,16 @@ def main():
 	tobiiglasses.start_streaming()
 	print("Please wait ...")
 	time.sleep(3.0)
-
-	for i in range(1000):
+	text = "xyz"
+	while(True):
 		print("Head unit: %s" % tobiiglasses.get_data()['mems'])
 		print("Left Eye: %s " % tobiiglasses.get_data()['left_eye'])
 		print("Right Eye: %s " % tobiiglasses.get_data()['right_eye'])
 		print("Gaze Position: %s " % tobiiglasses.get_data()['gp'])
 		print("Gaze Position 3D: %s " % tobiiglasses.get_data()['gp3'])
-
+		print("\n")
+		if keyboard.is_pressed('q'):
+			break
 	tobiiglasses.stop_streaming()
 	tobiiglasses.close()
 

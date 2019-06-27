@@ -14,7 +14,7 @@
 #
 #   You should have received a copy of the GNU General Public License
 #   along with this program.  If not, see <https://www.gnu.org/licenses/>
-
+import keyboard
 import time
 from tobiiglassesctrl.controller import TobiiGlassesController
 
@@ -23,8 +23,11 @@ if hasattr(__builtins__, 'raw_input'):
 
 
 def main():
-
-	tobiiglasses = TobiiGlassesController()
+	file1 = open("gazecoordinates.txt","w") 
+	tobiiglasses = TobiiGlassesController("10.218.107.188")
+	#NEW STUFF
+	tobiiglasses.start_streaming()
+	#/NEW STUFF
 	print(tobiiglasses.get_battery_info())
 	print(tobiiglasses.get_storage_info())
 
@@ -38,29 +41,38 @@ def main():
 	participant_name = input("Please insert the participant's name: ")
 	participant_id = tobiiglasses.create_participant(project_id, participant_name)
 
-	calibration_id = tobiiglasses.create_calibration(project_id, participant_id)
-	input("Put the calibration marker in front of the user, then press enter to calibrate")
-	tobiiglasses.start_calibration(calibration_id)
+	# calibration_id = tobiiglasses.create_calibration(project_id, participant_id)
+	# input("Put the calibration marker in front of the user, then press enter to calibrate")
+	# tobiiglasses.start_calibration(calibration_id)
 
-	res = tobiiglasses.wait_until_calibration_is_done(calibration_id)
+	# res = tobiiglasses.wait_until_calibration_is_done(calibration_id)
 
-	if res is False:
-		print("Calibration failed!")
-		exit(1)
+	# if res is False:
+	# 	print("Calibration failed!")
+	# 	exit(1)
 
 	recording_id = tobiiglasses.create_recording(participant_id)
-	print("Important! The recording will be stored in the SD folder projects/%s/recordings/%s" % (project_id, recording_id))
+	print("\nImportant! The recording will be stored in the SD folder projects/%s/recordings/%s" % (project_id, recording_id))
 	input("Press enter to start recording")
 	tobiiglasses.start_recording(recording_id)
 	tobiiglasses.send_custom_event("start_recording", "Start of the recording ")
+	while(True):
+		print("Gaze Position: %s " % tobiiglasses.get_data()['gp'])
+		file1.write("Gaze Position: %s \n" % tobiiglasses.get_data()['gp'])
+		print("\n")
+		if keyboard.is_pressed('q'):
+			break
+	file1.close()
 	input("Press enter to stop recording")
 	tobiiglasses.send_custom_event("stop_recording", "Stop of the recording " + str(recording_id))
 	tobiiglasses.stop_recording(recording_id)
-
-
-	if res is False:
-		print("Recording failed!")
-		exit(1)
+	#NEW STUFF
+	tobiiglasses.stop_streaming()
+	tobiiglasses.close()
+	#/NEW STUFF
+	# if res is False:
+	# 	print("Recording failed!")
+	# 	exit(1)
 
 if __name__ == '__main__':
     main()

@@ -51,7 +51,7 @@ frame_duration = 1000.0/float(video_freq) #frame duration in ms
 
 input("Press ENTER to start the video scene")
 
-cap = cv2.VideoCapture("rtsp://%s:8554/live/scene" % ipv4_address)
+cap = cv2.VideoCapture("rtsp://%s:8554/live/scene" % address)
 
 # Check if camera opened successfully
 if (cap.isOpened()== False):
